@@ -63,8 +63,8 @@ namespace ADSBackend.Controllers.Api.v1
             return new ApiResponse(System.Net.HttpStatusCode.OK, member);  
         }
 
-        private const string CreateMemberBindingFields = "FirstName,LastName,Email,Password";
-        private const string UpdateMemberBindingFields = "FirstName,LastName,Email";
+        private const string CreateMemberBindingFields = "FirstName,LastName,Email,Password,Nickname";
+        private const string UpdateMemberBindingFields = "FirstName,LastName,Email,Nickname";
 
         // POST: api/v1/Members/
         /// <summary>
@@ -80,7 +80,8 @@ namespace ADSBackend.Controllers.Api.v1
                 Email = member.Email?.Trim() ?? "",
                 FirstName = member.FirstName?.Trim() ?? "",
                 LastName = member.LastName?.Trim() ?? "",
-                Password = member.Password ?? ""                
+                Password = member.Password ?? "",
+                Nickname = member.Nickname ?? ""
             };
             
             TryValidateModel(safemember);
@@ -126,6 +127,7 @@ namespace ADSBackend.Controllers.Api.v1
             
             newMember.FirstName = member.FirstName ?? newMember.FirstName;
             newMember.LastName = member.LastName ?? newMember.LastName;
+            newMember.Nickname = member.Nickname ?? newMember.Nickname;
 
             TryValidateModel(newMember);
             ModelState.Scrub(UpdateMemberBindingFields);  // Remove all errors that aren't related to the binding fields

@@ -14,6 +14,9 @@ namespace ADSBackend.Models
         public int MemberId { get; set; }
 
         [Required]
+        public string Nickname { get; set; }
+
+        [Required]
         [StringLength(32, MinimumLength = 1, ErrorMessage = "First name is required")]  // Max 32 characters, min 1 character
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
