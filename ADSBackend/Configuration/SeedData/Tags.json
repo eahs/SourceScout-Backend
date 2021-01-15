@@ -1,14 +1,22 @@
 [
   {
-    "TagName": "Algebra",
-    "Category": {
-      "Name": "Math"
-    }
+    "TagName": "Calculus",
+    "CategoryId": 1
   },
   {
     "TagName": "Geometry",
-    "Category": {
-      "Name": "Math"
-    }
+    "CategoryId": 1
+  },
+  {
+    "TagName": "Grammer",
+    "CategoryId": "2"
+  },
+  {
+    "TagName": "Physics",
+    "CategoryId": "3"
+  },
+  {
+    "TagName": "US History",
+    "CategoryId": "4"
   }
 ]
