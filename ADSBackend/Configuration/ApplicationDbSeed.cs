@@ -83,6 +83,7 @@ namespace ADSBackend.Configuration
         {
             SeedDatabaseOrUpdate<Member>("Members.json", _context.Member, "Nickname");
             SeedDatabaseOrUpdate<Category>("Categories.json", _context.Category, "Name");
+            SeedDatabaseOrUpdate<Tag>("Tags.json", _context.Tag, "TagName");
         }
 
 
