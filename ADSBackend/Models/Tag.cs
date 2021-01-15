@@ -13,5 +13,8 @@ namespace ADSBackend.Models
         public int Id { get; set; }
         [DisplayName("Tag Name")]
         public string TagName { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
     }
 }

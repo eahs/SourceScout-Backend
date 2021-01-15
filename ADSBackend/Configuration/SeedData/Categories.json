@@ -10,5 +10,9 @@
   {
     "Name": "Science",
     "Private": false
+  },
+  {
+    "Name": "History",
+    "Private": false
   }
 ]
