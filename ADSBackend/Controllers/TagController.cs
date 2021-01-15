@@ -22,7 +22,8 @@ namespace ADSBackend.Controllers
         // GET: Tag
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tag.ToListAsync());
+            var applicationDbContext = _context.Tag.Include(t => t.Category);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Tag/Details/5
@@ -34,6 +35,7 @@ namespace ADSBackend.Controllers
             }
 
             var tag = await _context.Tag
+                .Include(t => t.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -46,6 +48,7 @@ namespace ADSBackend.Controllers
         // GET: Tag/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace ADSBackend.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TagName")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Id,TagName,CategoryId")] Tag tag)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace ADSBackend.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", tag.CategoryId);
             return View(tag);
         }
 
@@ -78,6 +82,7 @@ namespace ADSBackend.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", tag.CategoryId);
             return View(tag);
         }
 
@@ -86,7 +91,7 @@ namespace ADSBackend.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TagName")] Tag tag)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TagName,CategoryId")] Tag tag)
         {
             if (id != tag.Id)
             {
@@ -113,6 +118,7 @@ namespace ADSBackend.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", tag.CategoryId);
             return View(tag);
         }
 
@@ -125,6 +131,7 @@ namespace ADSBackend.Controllers
             }
 
             var tag = await _context.Tag
+                .Include(t => t.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
