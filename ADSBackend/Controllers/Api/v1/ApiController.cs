@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-
+using ADSBackend.Models;
 namespace ADSBackend.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -48,5 +48,7 @@ namespace ADSBackend.Controllers
             // TODO: extend this object to include some configuration items
             return new ConfigResponse();
         }
+
+        
     }
 }
