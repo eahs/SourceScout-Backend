@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ADSBackend.Models
 {
@@ -28,6 +29,8 @@ namespace ADSBackend.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public List<PostTag> Tags { get; set; }
-        
+
+        [NotMapped]
+        public List<String> TagNames { get; set; }
     }
 }
