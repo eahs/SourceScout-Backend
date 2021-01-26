@@ -7,34 +7,86 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ADSBackend.Data;
 using ADSBackend.Models;
+using ADSBackend.Controllers.Api.v1;
+using System.Net;
 
-namespace ADSBackend.Controllers
+namespace ADSBackend.Controllers.Api.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
-    public class PostApiController : ControllerBase
+    public class PostController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PostApiController(ApplicationDbContext context)
+        public PostController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/PostApi
+        // GET: api/v1/Post
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPost()
         {
-            return await _context.Post.ToListAsync();
+            var posts = await _context.Post.Include(p => p.Tags)
+                                         .ThenInclude(t => t.Tag)
+                                         .Include(p => p.Category)
+                                         .ToListAsync();
+            return posts;
         }
 
-        // GET: api/PostApi/5
+        
+        [HttpGet("Search/Tags")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetPost([FromQuery]string[] Tags)
+        {
+            List<PostTag> postTags = new List<PostTag>();
+            foreach (string t in Tags)
+            {
+                var postTagsTemp = await _context.PostTag.Include(pt => pt.Post).Include(pt => pt.Tag)
+                                              .Where(pt => t.Equals(pt.Tag.TagName))
+                                              .OrderBy(pt => pt.Post.Score)
+                                              .ToListAsync();
+                foreach (PostTag pt in postTagsTemp)
+                {
+                    postTags.Add(pt);
+                }
+            }
+            HashSet<int> idsOfPosts = new HashSet<int>();
+            HashSet<int> idsOfRequestedPosts = new HashSet<int>();
+            foreach (PostTag pt in postTags)
+            {
+                idsOfPosts.Add(pt.PostId);
+            }
+            List<List<PostTag>> groupsOfPosts = new List<List<PostTag>>();
+            foreach(int id in idsOfPosts)
+            {
+                groupsOfPosts.Add(postTags.Where(pt => pt.PostId == id).ToList());
+            }
+            foreach(List<PostTag> li in groupsOfPosts)
+            {
+                if (li.Count == Tags.Length)
+                {
+                    idsOfRequestedPosts.Add(li[0].PostId);
+                }
+            }
+            
+            
+
+            List<Post> posts = await _context.Post.Include(p => p.Tags)
+                                                  .ThenInclude(pt => pt.Tag)
+                                                  .Include(p => p.Category)
+                                                  .Where(p => idsOfRequestedPosts.Contains(p.PostId))
+                                                  .ToListAsync();
+            return posts;
+        }
+
+        
+        // GET: api/v1/Post/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
             var post = await _context.Post.Include(p => p.Tags)
-                                            .ThenInclude(t => t.Tag)
-                                            .Include(p => p.Category)
+                                          .ThenInclude(t => t.Tag)
+                                          .Include(p => p.Category)
                                           .FirstOrDefaultAsync(p => p.PostId == id);
 
             if (post == null)
@@ -45,7 +97,7 @@ namespace ADSBackend.Controllers
             return post;
         }
 
-        // PUT: api/PostApi/5
+        // PUT: api/v1/Post/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -77,7 +129,7 @@ namespace ADSBackend.Controllers
             return NoContent();
         }
 
-        // POST: api/PostApi
+        // POST: api/v1/Post
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -108,7 +160,7 @@ namespace ADSBackend.Controllers
             return CreatedAtAction(nameof(GetPost), new { id = post.PostId }, post);
         }
 
-        // DELETE: api/PostApi/5
+        // DELETE: api/v1/Post/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Post>> DeletePost(int id)
         {
