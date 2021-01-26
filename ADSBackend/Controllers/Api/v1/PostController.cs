@@ -79,7 +79,17 @@ namespace ADSBackend.Controllers.Api.v1
             return posts;
         }
 
-        
+        [HttpGet("Search/Category")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetPost([FromQuery] string Category)
+        {
+            return await _context.Post.Include(p => p.Category)
+                                      .Include(p => p.Tags)
+                                      .ThenInclude(pt => pt.Tag)
+                                      .Where(p => p.Category.Name.Equals(Category))
+                                      .ToListAsync();
+        }
+
+
         // GET: api/v1/Post/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
