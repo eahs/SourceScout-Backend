@@ -32,7 +32,10 @@ namespace ADSBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            var post = await _context.Post.FindAsync(id);
+            var post = await _context.Post.Include(p => p.Tags)
+                                            .ThenInclude(t => t.Tag)
+                                            .Include(p => p.Category)
+                                          .FirstOrDefaultAsync(p => p.PostId == id);
 
             if (post == null)
             {
