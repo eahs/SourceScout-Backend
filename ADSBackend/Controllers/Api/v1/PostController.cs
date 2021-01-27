@@ -39,6 +39,7 @@ namespace ADSBackend.Controllers.Api.v1
         public async Task<ActionResult<IEnumerable<Post>>> GetPost([FromQuery]string[] Tags)
         {
             List<PostTag> postTags = new List<PostTag>();
+            //adds all post tags that have a tag in the array Tags. All post tags are then stored in the list postTags
             foreach (string t in Tags)
             {
                 var postTagsTemp = await _context.PostTag.Include(pt => pt.Post).Include(pt => pt.Tag)
@@ -50,17 +51,22 @@ namespace ADSBackend.Controllers.Api.v1
                     postTags.Add(pt);
                 }
             }
+            
             HashSet<int> idsOfPosts = new HashSet<int>();
-            HashSet<int> idsOfRequestedPosts = new HashSet<int>();
+            List<int> idsOfRequestedPosts = new List<int>();
+            //adds all ids from the posttags. all uniqe because its a Hashset
             foreach (PostTag pt in postTags)
             {
                 idsOfPosts.Add(pt.PostId);
             }
             List<List<PostTag>> groupsOfPosts = new List<List<PostTag>>();
+            //seperates post tags into seperate lists based on the ids of the post. That means each list is one post with all of its tags
             foreach(int id in idsOfPosts)
             {
                 groupsOfPosts.Add(postTags.Where(pt => pt.PostId == id).ToList());
             }
+            //for each of the groups of posts if the number of post tags is number to the tags specified by the query string, 
+            //then that post id must have all the tags and/or more. We then add that id to a list
             foreach(List<PostTag> li in groupsOfPosts)
             {
                 if (li.Count == Tags.Length)
@@ -70,7 +76,7 @@ namespace ADSBackend.Controllers.Api.v1
             }
             
             
-
+            //List of all posts that have an id that are in the list of ids that have the correct tags
             List<Post> posts = await _context.Post.Include(p => p.Tags)
                                                   .ThenInclude(pt => pt.Tag)
                                                   .Include(p => p.Category)
