@@ -169,7 +169,7 @@ namespace ADSBackend.Controllers.Api.v1
                 pt.TagId = pt.Tag.Id;
                 post.Tags.Add(pt);
             }
-            
+            //Testing
             _context.Post.Add(post);
             await _context.SaveChangesAsync();
 

@@ -37,6 +37,7 @@ namespace ADSBackend.Controllers
             var post = await _context.Post
                 .Include(p => p.Category)
                 .Include(p => p.Member)
+                .Include(p => p.Tags)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
