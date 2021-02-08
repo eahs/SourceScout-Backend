@@ -42,10 +42,11 @@ namespace ADSBackend.Controllers.Api.v1
             //adds all post tags that have a tag in the array Tags. All post tags are then stored in the list postTags
             foreach (string t in Tags)
             {
-                var postTagsTemp = await _context.PostTag.Include(pt => pt.Post).Include(pt => pt.Tag)
-                                              .Where(pt => t.Equals(pt.Tag.TagName))
-                                              .OrderBy(pt => pt.Post.Score)
-                                              .ToListAsync();
+                var postTagsTemp = await _context.PostTag.Include(pt => pt.Post)
+                                                         .Include(pt => pt.Tag)
+                                                         .Where(pt => t.Equals(pt.Tag.TagName))
+                                                         .OrderBy(pt => pt.Post.Score)
+                                                         .ToListAsync();
                 foreach (PostTag pt in postTagsTemp)
                 {
                     postTags.Add(pt);
@@ -169,10 +170,9 @@ namespace ADSBackend.Controllers.Api.v1
                 pt.TagId = pt.Tag.Id;
                 post.Tags.Add(pt);
             }
-            
+            post.Category = await _context.Category.FirstOrDefaultAsync(c => c.CategoryId == post.CategoryId);
             _context.Post.Add(post);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction(nameof(GetPost), new { id = post.PostId }, post);
         }
 
