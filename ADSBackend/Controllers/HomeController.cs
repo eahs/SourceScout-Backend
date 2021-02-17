@@ -8,10 +8,20 @@ namespace ADSBackend.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Admin");
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
             }
-
-            return View();
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
         }
     }
 }
