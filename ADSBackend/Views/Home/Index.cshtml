@@ -1,8 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
 }
+@model ADSBackend.Models.HomeViewModels.HomeViewModel;
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to Source Scout!</h1>
-    <a asp-controller="Account" asp-action="Login" class="btn btn-success">Click Here to Login</a>
+    <form role="search" class="navbar-form-custom" asp-controller="Home" asp-action="Search">
+        <div class="form-group">
+            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search" asp-for="SearchInput">
+        </div>
+    </form>
 </div>

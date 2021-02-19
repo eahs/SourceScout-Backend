@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using System;
 namespace ADSBackend.Controllers
 {
     public class HomeController : Controller
     {
+        
+        //public string SearchInput { get; set; }
+
         public IActionResult Index()
         {
+           
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole("Admin"))
@@ -14,7 +18,7 @@ namespace ADSBackend.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", "User");
+                    return View();
                 }
             }
             else
@@ -22,6 +26,10 @@ namespace ADSBackend.Controllers
                 return RedirectToAction("Login", "Account");
             }
             
+        }
+        public IActionResult Search()
+        {
+            return RedirectToAction("Index", "Explore", new { s = "queryStringValue1" });
         }
     }
 }

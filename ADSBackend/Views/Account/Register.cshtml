@@ -1,12 +1,20 @@
-﻿@model RegisterViewModel
+﻿
+/*
+@model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/Layouts/_LayoutLogin.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="text-center center-block middle-box">
+    <div>
+        <div>
+            <h1 class="logo-name">
+                <img src="~/images/Logo.svg" width="150" height="150"/>
+            </h1>
+        </div>
+        <br />
+        <h3>Sign Up</h3>
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
             <h4>Create a new account.</h4>
             <hr />
@@ -25,6 +33,16 @@
                 <label asp-for="ConfirmPassword"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
