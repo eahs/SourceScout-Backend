@@ -19,27 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="MemberId" class="control-label"></label>
-                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpVotes" class="control-label"></label>
-                <input asp-for="UpVotes" class="form-control" />
-                <span asp-validation-for="UpVotes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DownVotes" class="control-label"></label>
-                <input asp-for="DownVotes" class="form-control" />
-                <span asp-validation-for="DownVotes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Score" class="control-label"></label>
-                <input asp-for="Score" class="form-control" />
-                <span asp-validation-for="Score" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Thumbnail" class="control-label"></label>
-                <input asp-for="Thumbnail" class="form-control" />
-                <span asp-validation-for="Thumbnail" class="text-danger"></span>
+                <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Link" class="control-label"></label>
@@ -50,23 +30,6 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateEdited" class="control-label"></label>
-                <input asp-for="DateEdited" class="form-control" />
-                <span asp-validation-for="DateEdited" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="Deleted" /> @Html.DisplayNameFor(model => model.Deleted)
-                    </label>
-                </div>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>

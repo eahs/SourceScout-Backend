@@ -16,8 +16,8 @@ namespace ADSBackend.Models
         public int MemberId { get; set; }
         public Member Member { get; set; }
         public int UpVotes { get; set; } = 1;
-        public int DownVotes { get; set; }
-        public double Score { get; set; }
+        public int DownVotes { get; set; } = 0;
+        public double Score { get; set; } = 1;
         public string Thumbnail { get; set; }
         public string Link { get; set; }
         public string Description { get; set; }

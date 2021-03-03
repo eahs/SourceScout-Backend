@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADSBackend.Data;
 using ADSBackend.Models;
+using Google.Apis.YouTube.v3;
+using Google.Apis.Services;
 
 namespace ADSBackend.Controllers
 {
@@ -23,6 +25,19 @@ namespace ADSBackend.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Post.Include(p => p.Category).Include(p => p.Member);
+            if (!User.IsInRole("Admin"))
+            {
+                string test = User.Identity.Name;
+                List<Member> memsfsd = _context.Member.ToList();
+                List<Member> mems = _context.Member.Where(m => m.Email == User.Identity.Name).ToList();
+                int _memberId = mems[0].MemberId;
+                ViewData["Posts"] = await _context.Post.Include(p => p.Category).Include(p => p.Member).Where(p => p.MemberId == _memberId).ToListAsync();
+            }
+            else
+            {
+                ViewData["Posts"] = await _context.Post.Include(p => p.Category).Include(p => p.Member).ToListAsync();
+            }
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,6 +52,7 @@ namespace ADSBackend.Controllers
             var post = await _context.Post
                 .Include(p => p.Category)
                 .Include(p => p.Member)
+                .Include(p => p.Tags)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
@@ -59,8 +75,31 @@ namespace ADSBackend.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Title,MemberId,UpVotes,DownVotes,Score,Thumbnail,Link,Description,DateCreated,DateEdited,Deleted,CategoryId")] Post post)
+        public async Task<IActionResult> Create([Bind("PostId,Title,Link,MemberId,Description,CategoryId")] Post post)
         {
+
+            post.DateCreated = DateTime.Now;
+            post.DateEdited = DateTime.Now;
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
+                
+            }) ;
+            var searchRequest = youtubeService.Videos.List("snippet");
+            string vidId = post.Link.Substring(post.Link.IndexOf("v="));
+            if (vidId.Length == 13)
+            {
+                vidId = vidId.Substring(2);
+            }
+            else
+            {
+                vidId = vidId.Substring(2, 11);
+            }
+            searchRequest.Id = vidId;
+            var searchResult = await searchRequest.ExecuteAsync();
+            post.Thumbnail = searchResult.Items[0].Snippet.Thumbnails.High.Url;
+            post.Member = _context.Member.Find(post.MemberId);
+            
             if (ModelState.IsValid)
             {
                 _context.Add(post);
@@ -167,6 +206,32 @@ namespace ADSBackend.Controllers
         private bool PostExists(int id)
         {
             return _context.Post.Any(e => e.PostId == id);
+        }
+        public async Task<IActionResult> View(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var post = await _context.Post.FindAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            if (post.Link.Contains("&"))
+            {
+                post.Link = post.Link.Substring(0, post.Link.IndexOf("&"));
+            }
+            if (post.Link.Contains("watch"))
+            {
+                string finalUrl = post.Link.Substring(0, post.Link.IndexOf("watch"));
+                finalUrl += "embed/" + post.Link.Substring(post.Link.IndexOf("watch") + 8);
+                post.Link = finalUrl;
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", post.CategoryId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "MemberId", "Email", post.MemberId);
+            return View(post);
         }
     }
 }

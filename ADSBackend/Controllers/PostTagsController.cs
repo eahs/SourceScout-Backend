@@ -64,6 +64,7 @@ namespace ADSBackend.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(postTag);
+                _context.Post.Find(postTag.PostId).Tags.Add(postTag);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
