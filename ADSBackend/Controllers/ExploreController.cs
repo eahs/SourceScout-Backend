@@ -25,13 +25,16 @@ namespace ADSBackend.Controllers
         }
         public IActionResult Search(string query = "")
         {
+            
+            query = query.Trim();
             if (query == "")
             {
                 queryResult = _context.Post.ToList();
             }
             else
             {
-                queryResult = _context.Post.Where(p => p.Title.Contains(query)).ToList();
+                queryResult = _context.Post.Where(p => p.Title.ToLower().Contains(query.ToLower())).ToList();
+                string d = query.ToLower();
             }
             ViewData["Videos"] = queryResult;
             return View();

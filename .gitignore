@@ -300,3 +300,4 @@ __pycache__/
 
 ADSBackend/Logs/
 !.gitkeep
+appsettings.json
