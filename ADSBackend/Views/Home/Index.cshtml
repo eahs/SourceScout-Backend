@@ -4,10 +4,10 @@
 }
 @model ADSBackend.Models.HomeViewModels.HomeViewModel;
 
-<div class="text-center">
-    <form role="search" class="navbar-form-custom" asp-controller="Home" asp-action="Search">
+<div class="text-center white-bg">
+    <form role="search" class="navbar-form-custom" asp-controller="Explore" asp-action="Index" method="get">
         <div class="form-group">
-            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search" asp-for="SearchInput">
+            <input type="text" placeholder="Search for something..." class="form-control" name="query" id="top-search"  >
         </div>
     </form>
 </div>

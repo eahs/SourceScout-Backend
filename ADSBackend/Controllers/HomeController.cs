@@ -27,9 +27,11 @@ namespace ADSBackend.Controllers
             }
             
         }
-        public IActionResult Search()
+        
+        public IActionResult Search(string SearchInput)
         {
-            return RedirectToAction("Index", "Explore", new { s = "queryStringValue1" });
+            return RedirectToAction("Index", "Explore", new { s = SearchInput });
+
         }
     }
 }

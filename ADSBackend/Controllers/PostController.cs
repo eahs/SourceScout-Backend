@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADSBackend.Data;
 using ADSBackend.Models;
+using Google.Apis.YouTube.v3;
 
 namespace ADSBackend.Controllers
 {
@@ -168,6 +169,32 @@ namespace ADSBackend.Controllers
         private bool PostExists(int id)
         {
             return _context.Post.Any(e => e.PostId == id);
+        }
+        public async Task<IActionResult> View(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var post = await _context.Post.FindAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            if (post.Link.Contains("&"))
+            {
+                post.Link = post.Link.Substring(0, post.Link.IndexOf("&"));
+            }
+            if (post.Link.Contains("watch"))
+            {
+                string finalUrl = post.Link.Substring(0, post.Link.IndexOf("watch"));
+                finalUrl += "embed/" + post.Link.Substring(post.Link.IndexOf("watch") + 8);
+                post.Link = finalUrl;
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", post.CategoryId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "MemberId", "Email", post.MemberId);
+            return View(post);
         }
     }
 }
