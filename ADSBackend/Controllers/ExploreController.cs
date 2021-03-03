@@ -19,7 +19,11 @@ namespace ADSBackend.Controllers
         }
 
         List<Post> queryResult = new List<Post>();
-        public IActionResult Index(string query = "")
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult Search(string query = "")
         {
             if (query == "")
             {

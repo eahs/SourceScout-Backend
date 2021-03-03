@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+
 }
 
 <h2>Index</h2>
@@ -16,19 +17,7 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpVotes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DownVotes)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Score)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Thumbnail)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Link)
@@ -40,55 +29,31 @@
                 @Html.DisplayNameFor(model => model.DateCreated)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateEdited)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deleted)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in (List<ADSBackend.Models.Post>)ViewData["Posts"]) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @item.Title
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Member.Email)
+                @item.Score
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UpVotes)
+                @item.Link
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DownVotes)
+                @item.Description
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Score)
+                @item.DateCreated
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Thumbnail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Link)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateEdited)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @item.Category.Name
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PostId">Edit</a> |

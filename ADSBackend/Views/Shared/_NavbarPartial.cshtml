@@ -37,8 +37,14 @@
                         <i class="fa fa-bell"></i>
                     </div>
                 </li>
-                <li is-active-route asp-controller="Admin">
-                    <a asp-controller="Admin" asp-action="Index"><i class="fa fa-dashboard"></i><span class="nav-label">Dashboard</span></a>
+                <li is-active-route asp-controller="Home">
+                    <a asp-controller="Home" asp-action="Index"><i class="fa fa-star"></i><span class="nav-label">Home</span></a>
+                </li>
+                <li is-active-route asp-controller="Explore">
+                    <a asp-controller="Explore" asp-action="Index"><i class="fa fa-star"></i><span class="nav-label">Explore</span></a>
+                </li>
+                <li is-active-route asp-controller="Post">
+                    <a asp-controller="Post" asp-action="Create"><i class="fa fa-star"></i><span class="nav-label">Upload</span></a>
                 </li>
                 @if (User.IsInRole("Admin"))
                 {
